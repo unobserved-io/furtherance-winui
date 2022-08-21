@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Furtherance (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Furtherance (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

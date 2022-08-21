@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Source>C:\Users\rkres\OneDrive\Documents\Furtherance\Icons\Furtherance.pdf</Source>
+    <SmallTileSource>C:\Users\rkres\OneDrive\Documents\Furtherance\Icons\Furtherance.pdf</SmallTileSource>
+    <MediumTileSource>C:\Users\rkres\OneDrive\Documents\Furtherance\Icons\Furtherance.pdf</MediumTileSource>
+    <WideTileSource>C:\Users\rkres\OneDrive\Documents\Furtherance\Icons\Furtherance.pdf</WideTileSource>
+    <LargeTileSource>C:\Users\rkres\OneDrive\Documents\Furtherance\Icons\Furtherance.pdf</LargeTileSource>
+    <AppIconSource>C:\Users\rkres\OneDrive\Documents\Furtherance\Icons\Furtherance.pdf</AppIconSource>
+    <SplashScreenSource>C:\Users\rkres\OneDrive\Documents\Furtherance\Icons\Furtherance.pdf</SplashScreenSource>
+    <PackageLogoSource>C:\Users\rkres\OneDrive\Documents\Furtherance\Icons\Furtherance.pdf</PackageLogoSource>
+    <BadgeLogoSource>C:\Users\rkres\OneDrive\Documents\Furtherance\Icons\Furtherance.png</BadgeLogoSource>
+    <DeployOptionalPackages>True</DeployOptionalPackages>
+    <ActiveDebugProfile>Furtherance (Package)</ActiveDebugProfile>
+    <UapAppxPackageBuildMode>StoreAndSideload</UapAppxPackageBuildMode>
+    <AppxShowAllApps>False</AppxShowAllApps>
+    <AppxBuildConfigurationSelection>x86|x64|arm64</AppxBuildConfigurationSelection>
+    <PackageOptionalProjectsInIdeBuilds>False</PackageOptionalProjectsInIdeBuilds>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <ItemGroup>
+    <Page Update="ReportWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="AboutWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>
