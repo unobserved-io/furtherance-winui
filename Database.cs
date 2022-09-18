@@ -5,19 +5,35 @@ using System.IO;
 using System.Linq;
 using Furtherance.Views;
 using Microsoft.Data.Sqlite;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
 using Windows.Storage;
 
 namespace Furtherance;
 public static class Database
 {
-    public const string databaseName = "furtherance.db";
+    static string dbPath;
+
+    public static void GetDatabasePath()
+    {
+        if (App.localSettings.Values["DatabaseLocation"] != null)
+        {
+            dbPath = (string)App.localSettings.Values["DatabaseLocation"];
+        }
+        else
+        {
+            dbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "furtherance.db");
+            App.localSettings.Values["DatabaseLocation"] = dbPath;
+        }
+        System.Diagnostics.Debug.WriteLine(dbPath);
+    }
 
     public static async void InitializeDatabase()
     {
-        await ApplicationData.Current.LocalFolder.CreateFileAsync(databaseName, CreationCollisionOption.OpenIfExists);
-        var dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, databaseName);
-        System.Diagnostics.Debug.WriteLine(dbpath);
-        using var db = new SqliteConnection($"Filename={dbpath}");
+        GetDatabasePath();
+        var dbFolder = await StorageFolder.GetFolderFromPathAsync(Path.GetDirectoryName(dbPath));
+        await dbFolder.CreateFileAsync(Path.GetFileName(dbPath), CreationCollisionOption.OpenIfExists);
+        using var db = new SqliteConnection($"Filename={dbPath}");
         db.Open();
 
         var tableCommand = "CREATE TABLE IF NOT " +
@@ -34,8 +50,7 @@ public static class Database
 
     public static void AddData(string taskName, DateTime startTime, DateTime stopTime, string tags)
     {
-        var dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, databaseName);
-        using var db = new SqliteConnection($"Filename={dbpath}");
+        using var db = new SqliteConnection($"Filename={dbPath}");
         db.Open();
 
         var insertCommand = new SqliteCommand
@@ -59,8 +74,7 @@ public static class Database
     {
         var allTasks = new List<FurTask>();
 
-        var dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, databaseName);
-        using (var db = new SqliteConnection($"Filename={dbpath}"))
+        using (var db = new SqliteConnection($"Filename={dbPath}"))
         {
             db.Open();
 
@@ -90,8 +104,7 @@ public static class Database
     {
         var allSuggestions = new List<string>();
 
-        var dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, databaseName);
-        using (var db = new SqliteConnection($"Filename={dbpath}"))
+        using (var db = new SqliteConnection($"Filename={dbPath}"))
         {
             db.Open();
 
@@ -124,9 +137,8 @@ public static class Database
     {
         FurTask task;
 
-        var dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, databaseName);
         using (var db =
-           new SqliteConnection($"Filename={dbpath}"))
+           new SqliteConnection($"Filename={dbPath}"))
         {
             db.Open();
 
@@ -156,8 +168,7 @@ public static class Database
 
     public static void UpdateByID(string id, string taskName, DateTime startTime, DateTime stopTime, string tags)
     {
-        var dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, databaseName);
-        using var db = new SqliteConnection($"Filename={dbpath}");
+        using var db = new SqliteConnection($"Filename={dbPath}");
         db.Open();
 
         var updateCommand = new SqliteCommand
@@ -181,8 +192,7 @@ public static class Database
 
     public static void UpdateTaskName(string id, string newTaskName)
     {
-        var dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, databaseName);
-        using var db = new SqliteConnection($"Filename={dbpath}");
+        using var db = new SqliteConnection($"Filename={dbPath}");
         db.Open();
 
         var updateCommand = new SqliteCommand
@@ -202,8 +212,7 @@ public static class Database
 
     public static void UpdateTaskTags(string id, string newTags)
     {
-        var dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, databaseName);
-        using var db = new SqliteConnection($"Filename={dbpath}");
+        using var db = new SqliteConnection($"Filename={dbPath}");
         db.Open();
 
         var updateCommand = new SqliteCommand
@@ -223,8 +232,7 @@ public static class Database
 
     public static void DeleteByGroupedTask(List<GroupedTask> taskList)
     {
-        var dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, databaseName);
-        using var db = new SqliteConnection($"Filename={dbpath}");
+        using var db = new SqliteConnection($"Filename={dbPath}");
         db.Open();
 
         foreach (var task in taskList)
@@ -243,8 +251,7 @@ public static class Database
 
     public static void DeleteByIDs(List<string> idList)
     {
-        var dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, databaseName);
-        using var db = new SqliteConnection($"Filename={dbpath}");
+        using var db = new SqliteConnection($"Filename={dbPath}");
         db.Open();
 
         foreach (var id in idList)
@@ -263,8 +270,7 @@ public static class Database
 
     public static void DeleteByID(string id)
     {
-        var dbpath = Path.Combine(ApplicationData.Current.LocalFolder.Path, databaseName);
-        using var db = new SqliteConnection($"Filename={dbpath}");
+        using var db = new SqliteConnection($"Filename={dbPath}");
         db.Open();
 
         var deleteCommand = new SqliteCommand
@@ -276,6 +282,57 @@ public static class Database
         deleteCommand.ExecuteReader();
 
         db.Close();
+    }
+
+    public static void BackupDB(string backupPath)
+    {
+        try
+        {
+            using var db = new SqliteConnection($"Filename={dbPath}");
+            db.Open();
+            if (File.Exists(backupPath))
+            {
+                File.Delete(backupPath);
+            }
+            using var backupDb = new SqliteConnection($"Filename={backupPath}");
+            backupDb.Open();
+            db.BackupDatabase(backupDb);
+        }
+        catch (Exception)
+        {
+            ShowErrorDialog("Unable to back up the database.");
+        }
+       
+    }
+
+    public static void ImportDB(string importFile)
+    {
+        try
+        {
+            using var newDb = new SqliteConnection($"Filename={importFile}");
+            newDb.Open();
+            using var oldDb = new SqliteConnection($"Filename={dbPath}");
+            oldDb.Open();
+            newDb.BackupDatabase(oldDb);
+        }
+        catch (Exception)
+        {
+            ShowErrorDialog("The selected database could not be imported.");
+        }
+    }
+
+    public static async void ShowErrorDialog(string message)
+    {
+        ContentDialog dialog = new ContentDialog();
+
+        dialog.XamlRoot = MainPage.mainPage.XamlRoot;
+        dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+        dialog.Title = "Failed";
+        dialog.Content = message;
+        dialog.PrimaryButtonText = "OK";
+        dialog.DefaultButton = ContentDialogButton.Primary;
+
+        var result = await dialog.ShowAsync();
     }
 
     public static string ToRfc3339String(this DateTime dateTime)

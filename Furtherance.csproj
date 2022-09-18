@@ -21,6 +21,7 @@
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundle>Never</AppxBundle>
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
+    <AppxBundlePlatforms>x86|x64|arm64</AppxBundlePlatforms>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="AboutWindow.xaml" />

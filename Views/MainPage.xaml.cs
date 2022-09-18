@@ -456,7 +456,7 @@ public sealed partial class MainPage : Page
         }
     }
 
-    private void RefreshTaskList()
+    public void RefreshTaskList()
     {
         TaskListData.Source = GetTasksGrouped();
         suggestions = Database.GetTaskSuggestions();
@@ -479,7 +479,7 @@ public sealed partial class MainPage : Page
 
     public static DateTime FromRfc3339String(string rfc3339String)
     {
-        return DateTime.ParseExact(rfc3339String, "yyyy-MM-dd'T'HH:mm:ss.fffzzz", DateTimeFormatInfo.InvariantInfo);
+        return System.Xml.XmlConvert.ToDateTime(rfc3339String, System.Xml.XmlDateTimeSerializationMode.Local);
     }
 
     public static TimeSpan RoundSeconds(TimeSpan span)

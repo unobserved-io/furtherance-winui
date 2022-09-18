@@ -66,7 +66,7 @@ public partial class App : Application
     {
         InitializeComponent();
         UnhandledException += App_UnhandledException;
-        Database.InitializeDatabase();
+        // Database.InitializeDatabase();
     }
 
     private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
@@ -93,6 +93,7 @@ public partial class App : Application
         }
 
         InitializeSettings();
+        Database.InitializeDatabase();
         base.OnLaunched(args);
         var activationService = App.GetService<IActivationService>();
         await activationService.ActivateAsync(args);

@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using Furtherance.Views;
 using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using static PInvoke.User32;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace Furtherance;
 /// <summary>
-/// An empty window that can be used on its own or navigated to within a Frame.
+/// Furtherance's settings window.
 /// </summary>
 public sealed partial class SettingsWindow : Window
 {
@@ -45,6 +46,11 @@ public sealed partial class SettingsWindow : Window
         if (App.localSettings.Values["PomodoroTime"] != null)
         {
             pomodoroMinutesSpin.Value = (double)App.localSettings.Values["PomodoroTime"];
+        }
+
+        if (App.localSettings.Values["DatabaseLocation"] != null)
+        {
+            databaseLocText.Text = "Location: " + (string)App.localSettings.Values["DatabaseLocation"];
         }
     }
 
@@ -117,4 +123,63 @@ public sealed partial class SettingsWindow : Window
                   ~(int)SetWindowLongFlags.WS_MAXIMIZEBOX));
     }
 
+    private async void Change_DB_Location_Click(object sender, RoutedEventArgs e)
+    {
+        var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+
+        var savePicker = new Windows.Storage.Pickers.FileSavePicker()
+        {
+            SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary
+        };
+        WinRT.Interop.InitializeWithWindow.Initialize(savePicker, hwnd);
+        savePicker.FileTypeChoices.Add("Database", new List<string>() { ".db" });
+        savePicker.SuggestedFileName = "furtherance.db";
+
+        StorageFile file = await savePicker.PickSaveFileAsync();
+        if (file != null)
+        {
+            Database.BackupDB(file.Path);
+            databaseLocText.Text = "Location: " + file.Path;
+            App.localSettings.Values["DatabaseLocation"] = file.Path;
+            Database.GetDatabasePath();
+        }
+    }
+
+    private async void Backup_DB_Click(object sender, RoutedEventArgs e)
+    {
+        var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+
+        var savePicker = new Windows.Storage.Pickers.FileSavePicker()
+        {
+            SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary
+        };
+        WinRT.Interop.InitializeWithWindow.Initialize(savePicker, hwnd);
+        savePicker.FileTypeChoices.Add("Database", new List<string>() { ".db" });
+        savePicker.SuggestedFileName = "furtherance_bkup.db";
+
+        StorageFile file = await savePicker.PickSaveFileAsync();
+        if (file != null)
+        {
+            Database.BackupDB(file.Path);
+        }
+    }
+
+    private async void Import_DB_Click(object sender, RoutedEventArgs e)
+    {
+        var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+
+        var openPicker = new Windows.Storage.Pickers.FileOpenPicker()
+        {
+            SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary
+        };
+        WinRT.Interop.InitializeWithWindow.Initialize(openPicker, hwnd);
+        openPicker.FileTypeFilter.Add(".db");
+
+        StorageFile file = await openPicker.PickSingleFileAsync();
+        if (file != null)
+        {
+            Database.ImportDB(file.Path);
+            MainPage.mainPage.RefreshTaskList();
+        }
+    }
 }

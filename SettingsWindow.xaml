@@ -59,7 +59,15 @@
                                    ValueChanged="PomodoroSpin_Changed"/>
                     </StackPanel>
                 </StackPanel>
-                
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Database" FontSize="32" Style="{StaticResource HeaderTextBlockStyle}" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="databaseLocText" Text="Location:" FontSize="12" FontWeight="SemiBold"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Change Location" Click="Change_DB_Location_Click"/>
+                        <Button Content="Save Backup" Click="Backup_DB_Click"/>
+                        <Button Content="Import Backup" Click="Import_DB_Click"/>
+                    </StackPanel>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
     </StackPanel>
