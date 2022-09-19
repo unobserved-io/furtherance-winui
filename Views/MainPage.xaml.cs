@@ -38,6 +38,9 @@ public sealed partial class MainPage : Page
     private bool pomodoroContinue = false;
     public static MainPage mainPage = null;
     private List<string> suggestions;
+    public Window settingsWindow;
+    public Window aboutWindow;
+    public Window reportWindow;
 
     public MainPage()
     {
@@ -393,20 +396,53 @@ public sealed partial class MainPage : Page
 
     private void About_Clicked(object sender, RoutedEventArgs e)
     {
-        Window aboutWindow = new AboutWindow();
-        aboutWindow.Activate();
+        if (aboutWindow == null)
+        {
+            aboutWindow = new AboutWindow();
+        }
+        try
+        {
+            aboutWindow.Activate();
+        }
+        catch (Exception)
+        {
+            aboutWindow = new AboutWindow();
+            aboutWindow.Activate();
+        }
     }
 
     private void Settings_Clicked(object sender, RoutedEventArgs e)
     {
-        Window aboutWindow = new SettingsWindow();
-        aboutWindow.Activate();
+        if (settingsWindow == null)
+        {
+            settingsWindow = new SettingsWindow();
+        }
+        try
+        {
+            settingsWindow.Activate();
+        }
+        catch (Exception)
+        {
+            settingsWindow = new SettingsWindow();
+            settingsWindow.Activate();
+        }
     }
 
     private void GenerateReport_Clicked(object sender, RoutedEventArgs e)
     {
-        Window reportWindow = new ReportWindow();
-        reportWindow.Activate();
+        if (reportWindow == null)
+        {
+            reportWindow = new ReportWindow();
+        }
+        try
+        {
+            reportWindow.Activate();
+        }
+        catch (Exception)
+        {
+            reportWindow = new ReportWindow();
+            reportWindow.Activate();
+        }
     }
 
     private void SaveTask(DateTime stopTime)

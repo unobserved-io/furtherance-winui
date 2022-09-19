@@ -5,6 +5,7 @@
     xmlns:local="using:Furtherance"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Closed="Window_Closed"
     mc:Ignorable="d">
 
     <StackPanel Margin="20 10 20 10" Spacing="15">
@@ -61,8 +62,8 @@
                 </StackPanel>
                 <StackPanel Spacing="5">
                     <TextBlock Text="Database" FontSize="32" Style="{StaticResource HeaderTextBlockStyle}" FontWeight="SemiBold"/>
-                    <TextBlock x:Name="databaseLocText" Text="Location:" FontSize="12" FontWeight="SemiBold"/>
-                    <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="databaseLocText" Text="Location:" FontSize="12" FontWeight="SemiBold" TextWrapping="Wrap" />
+                    <StackPanel Orientation="Horizontal" Spacing="5">
                         <Button Content="Change Location" Click="Change_DB_Location_Click"/>
                         <Button Content="Save Backup" Click="Backup_DB_Click"/>
                         <Button Content="Import Backup" Click="Import_DB_Click"/>

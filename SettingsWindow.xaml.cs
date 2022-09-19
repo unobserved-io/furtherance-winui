@@ -182,4 +182,9 @@ public sealed partial class SettingsWindow : Window
             MainPage.mainPage.RefreshTaskList();
         }
     }
+
+    private void Window_Closed(object sender, WindowEventArgs args)
+    {
+        MainPage.mainPage.settingsWindow = null;
+    }
 }

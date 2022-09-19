@@ -1,4 +1,5 @@
 ﻿using System;
+using Furtherance.Views;
 using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
@@ -40,5 +41,10 @@ public sealed partial class AboutWindow : Window
                (SetWindowLongFlags)(GetWindowLong(hwnd,
                   WindowLongIndexFlags.GWL_STYLE) &
                   ~(int)SetWindowLongFlags.WS_MAXIMIZEBOX));
+    }
+
+    private void Window_Closed(object sender, WindowEventArgs args)
+    {
+        MainPage.mainPage.aboutWindow = null;
     }
 }

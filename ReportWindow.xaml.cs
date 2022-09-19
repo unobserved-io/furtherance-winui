@@ -283,4 +283,9 @@ public sealed partial class ReportWindow : Window
                   WindowLongIndexFlags.GWL_STYLE) &
                   ~(int)SetWindowLongFlags.WS_MAXIMIZEBOX));
     }
+
+    private void Window_Closed(object sender, WindowEventArgs args)
+    {
+        MainPage.mainPage.reportWindow = null;
+    }
 }
