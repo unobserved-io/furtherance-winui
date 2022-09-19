@@ -12,7 +12,7 @@
         <Image Source="Assets/Square44x44Logo.targetsize-256.png" MaxHeight="128"/>
         <TextBlock Text="Furtherance" TextAlignment="Center" FontSize="16" FontWeight="Bold"/>
         <TextBlock Text="Track your time without being tracked." TextAlignment="Center"/>
-        <TextBlock Text="Version 1.0.0" TextAlignment="Center"/>
+        <TextBlock Text="Version 1.2.0" TextAlignment="Center"/>
         <HyperlinkButton Content="© 2022 LivaLiva" NavigateUri="http://www.livaliva.com" HorizontalAlignment="Center"/>
         <HyperlinkButton Content="Created by Ricky Kresslein" NavigateUri="http://www.kressle.in" HorizontalAlignment="Center"/>
     </StackPanel>
