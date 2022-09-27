@@ -8,6 +8,9 @@ using Microsoft.Data.Sqlite;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml;
 using Windows.Storage;
+using System.Collections;
+using System.Threading.Tasks;
+using System.Reflection.PortableExecutable;
 
 namespace Furtherance;
 public static class Database
@@ -284,6 +287,32 @@ public static class Database
         db.Close();
     }
 
+    public static bool CheckDBValidity(SqliteConnection db)
+    {
+        db.Open();
+
+        var selectCommand = new SqliteCommand
+        {
+            Connection = db,
+            CommandText = "SELECT task_name, start_time, stop_time, tags FROM tasks ORDER BY ROWID ASC LIMIT 1"
+        };
+
+        try
+        {
+            var query = selectCommand.ExecuteReader();
+            if (query.HasRows)
+            {
+                return true;
+            }
+            return false;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+    }
+
     public static void BackupDB(string backupPath)
     {
         try
@@ -310,10 +339,19 @@ public static class Database
         try
         {
             using var newDb = new SqliteConnection($"Filename={importFile}");
-            newDb.Open();
-            using var oldDb = new SqliteConnection($"Filename={dbPath}");
-            oldDb.Open();
-            newDb.BackupDatabase(oldDb);
+
+            if (CheckDBValidity(newDb))
+            {
+                newDb.Open();
+                using var oldDb = new SqliteConnection($"Filename={dbPath}");
+                oldDb.Open();
+                newDb.BackupDatabase(oldDb);
+            }
+            else
+            {
+                ShowErrorDialog("The selected database is not a valid Furtherance database.");
+            }
+
         }
         catch (Exception)
         {
