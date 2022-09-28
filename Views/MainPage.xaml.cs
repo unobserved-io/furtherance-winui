@@ -99,7 +99,7 @@ public sealed partial class MainPage : Page
 
     private void TaskInput_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
     {
-        if (args.ChosenSuggestion == null)
+        if (args.ChosenSuggestion == null && startButton.IsEnabled)
         {
             StartButton_Click(this, new RoutedEventArgs());
         }
