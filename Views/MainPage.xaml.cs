@@ -64,6 +64,10 @@ public sealed partial class MainPage : Page
         {
             startButton.IsEnabled = false;
         }
+        else if (taskInput.Text.TrimStart().First() == '#')
+        {
+            startButton.IsEnabled = false;
+        }
         else
         {
             startButton.IsEnabled = true;
