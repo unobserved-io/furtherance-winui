@@ -58,8 +58,8 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock x:Name="taskNameBlock" Text="{x:Bind Key}"/>
-                                <TextBlock Text="{x:Bind TotalTime}" TextAlignment="Right" Grid.Column="1" Margin="0 0 15 0"/>
+                                <TextBlock x:Name="taskNameBlock" Text="{x:Bind Key}" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Text="{x:Bind TotalTime}" TextAlignment="Right" Grid.Column="1" Margin="0 0 15 0" TextTrimming="CharacterEllipsis"/>
                             </Grid>
                         </TreeViewItem.Content>
                     </TreeViewItem>
