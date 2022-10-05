@@ -507,14 +507,14 @@ public sealed partial class MainPage : Page
         IEnumerable<FurTaskGroupList> query;
         query = from item in Database.GetData()
         group item by item.StartTime.ToString("m", DateTimeFormatInfo.InvariantInfo) into g
-        orderby g.Key
+        // orderby g.Key // Ordering sorts in alphabetical, not chronological order
         // Filter tasks that are unique by both name and tags
         select new FurTaskGroupList(g
             .GroupBy(p => new { p.Name, p.Tags })
             .Select(g => g.First())
             .ToList()) { Key = g.Key }; 
         
-        return new ObservableCollection<FurTaskGroupList>(query.Reverse());
+        return new ObservableCollection<FurTaskGroupList>(query); // Note: Used to be query.Reverse() when ordered by g.Key
     }
 
     public static DateTime FromRfc3339String(string rfc3339String)
