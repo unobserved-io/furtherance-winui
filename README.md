@@ -3,7 +3,7 @@ Furtherance is a time tracking app.
 It allows you to track time spent on different activities without worrying about your data being captured and sold.
 
 <p align="center">
-    <img width="500px" src="https://unobserved.io/assets/screenshots/furtherance-mac.png" alt="Furtherance screenshot"/>
+    <img width="500px" src="https://unobserved.io/assets/screenshots/furtherance-windows.png" alt="Furtherance screenshot"/>
 </p>
 
 ## Features
