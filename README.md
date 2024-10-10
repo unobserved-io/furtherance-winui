@@ -1,6 +1,6 @@
-# Furtherance
 **This version of Furtherance has been replaced by the new, cross-platform version, which you can find [here](https://github.com/unobserved-io/Furtherance).**
 
+# Furtherance
 Furtherance is a time tracking app.
 It allows you to track time spent on different activities without worrying about your data being captured and sold.
 
